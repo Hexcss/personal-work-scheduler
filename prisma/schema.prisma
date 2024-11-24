@@ -1,0 +1,28 @@
+datasource db {
+  provider = "sqlite"
+  url      = "file:./dev.db"
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model User {
+  id        Int      @id @default(autoincrement())
+  email     String   @unique
+  name      String?
+  createdAt DateTime @default(now())
+  events    Event[]
+}
+
+model Event {
+  id        Int      @id @default(autoincrement())
+  userId    Int
+  title     String
+  startTime DateTime
+  endTime   DateTime
+  recurrence String?  // Add this field for recurring events
+  createdAt DateTime @default(now())
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
